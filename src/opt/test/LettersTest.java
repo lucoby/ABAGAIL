@@ -20,10 +20,13 @@ import java.text.*;
  * @version 1.0
  */
 public class LettersTest {
+	private static double normSub = 0, normDiv = 15;
+    private static int trainingLength = 16000, testingLength = 4000;
+    
     private static Instance[] training = initializeTraining();
     private static Instance[] testing = initializeTesting();
 
-    private static int inputLayer = 16, hiddenLayer = 5, outputLayer = 26, trainingIterations = 1000;
+    private static int inputLayer = 16, hiddenLayer = 5, outputLayer = 26, trainingIterations = 10000;
     private static BackPropagationNetworkFactory factory = new BackPropagationNetworkFactory();
     
     private static ErrorMeasure measure = new SumOfSquaresError();
@@ -43,8 +46,7 @@ public class LettersTest {
 
     private static DecimalFormat df = new DecimalFormat("0.000");
     
-    private static double normSub = 0, normDiv = 15;
-    private static int trainingLength = 16000, testingLength = 4000;
+    
 
     public static void main(String[] args) {
         for(int i = 0; i < oa.length; i++) {
@@ -75,27 +77,8 @@ public class LettersTest {
                 networks[i].setInputValues(training[j].getData());
                 networks[i].run();
 
-                predicted = training[j].getLabel().getData().argMax();
-                actual = networks[i].getOutputValues().argMax();
-//                predicted = Double.parseDouble(instances[j].getLabel().toString());
-//                actual = Double.parseDouble(networks[i].getOutputValues().toString());
-
-                double trash = predicted == actual ? train_correct++ : train_incorrect++;
-
-            }
-            end = System.nanoTime();
-            testingTime = end - start;
-            testingTime /= Math.pow(10,9);
-            
-            // Testing error
-            
-            start = System.nanoTime();
-            for(int j = 0; j < training.length; j++) {
-                networks[i].setInputValues(training[j].getData());
-                networks[i].run();
-
-                predicted = training[j].getLabel().getData().argMax();
-                actual = networks[i].getOutputValues().argMax();
+                actual = training[j].getLabel().getData().argMax();
+                predicted  = networks[i].getOutputValues().argMax();
 //                predicted = Double.parseDouble(instances[j].getLabel().toString());
 //                actual = Double.parseDouble(networks[i].getOutputValues().toString());
 
@@ -107,8 +90,32 @@ public class LettersTest {
             testingTime /= Math.pow(10,9);
             
             results +=  "\nResults for " + oaNames[i] + ": \nCorrectly classified " + train_correct + " instances." +
-                        "\nIncorrectly classified " + train_incorrect + " instances.\nPercent correctly classified: "
-                        + df.format(train_correct/(train_correct+train_incorrect)*100) + "%\nTraining time: " + df.format(trainingTime)
+                    "\nIncorrectly classified " + train_incorrect + " instances.\nPercent correctly classified: "
+                    + df.format(train_correct/(train_correct+train_incorrect)*100) + "%\nTraining time: " + df.format(trainingTime)
+                    + " seconds\nTesting time: " + df.format(testingTime) + " seconds\n";
+            
+            // Testing error
+            
+            start = System.nanoTime();
+            for(int j = 0; j < testing.length; j++) {
+                networks[i].setInputValues(testing[j].getData());
+                networks[i].run();
+
+                actual = testing[j].getLabel().getData().argMax();
+                predicted = networks[i].getOutputValues().argMax();
+//                predicted = Double.parseDouble(instances[j].getLabel().toString());
+//                actual = Double.parseDouble(networks[i].getOutputValues().toString());
+
+                double trash = predicted == actual ? test_correct++ : test_incorrect++;
+
+            }
+            end = System.nanoTime();
+            testingTime = end - start;
+            testingTime /= Math.pow(10,9);
+            
+            results +=  "\nResults for " + oaNames[i] + ": \nCorrectly classified " + test_correct + " instances." +
+                        "\nIncorrectly classified " + test_incorrect + " instances.\nPercent correctly classified: "
+                        + df.format(test_correct/(test_correct+test_incorrect)*100) + "%\nTraining time: " + df.format(trainingTime)
                         + " seconds\nTesting time: " + df.format(testingTime) + " seconds\n";
         }
 
@@ -137,7 +144,7 @@ public class LettersTest {
 
     private static Instance[] initializeTraining() {
 
-        double[][][] attributes = new double[trainingLength][][];
+        double[][][] attributes = new double[16000][][];
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(new File("src/opt/test/LettersTrain.txt")));
@@ -150,8 +157,10 @@ public class LettersTest {
                 attributes[i][0] = new double[16]; // 7 attributes
                 attributes[i][1] = new double[26]; // 26 outputs
 
-                for(int j = 0; j < 16; j++)
-                    attributes[i][0][j] = (Double.parseDouble(scan.next()) - normSub) / normDiv;
+                for(int j = 0; j < 16; j++) {
+                	attributes[i][0][j] = (Double.parseDouble(scan.next()) - normSub) / normDiv;
+                	int k = 0;
+                }
 
                 attributes[i][1][scan.next().charAt(0) - 'A'] = 1;
                 
@@ -173,7 +182,7 @@ public class LettersTest {
     
     private static Instance[] initializeTesting() {
 
-        double[][][] attributes = new double[testingLength][][];
+        double[][][] attributes = new double[4000][][];
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(new File("src/opt/test/LettersTest.txt")));
