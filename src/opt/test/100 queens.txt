@@ -1,0 +1,87 @@
+100 iter:
+RHC: 187.0
+RHC: Board Position: 
+Time : 1
+============================
+SA: 188.0
+SA: Board Position: 
+Time : 0
+============================
+GA: 180.0
+GA: Board Position: 
+Time : 23
+============================
+MIMIC: 181.0
+MIMIC: Board Position: 
+Time : 40
+
+
+200 iter:
+RHC: 189.0
+RHC: Board Position: 
+Time : 2
+============================
+SA: 189.0
+SA: Board Position: 
+Time : 0
+============================
+GA: 175.0
+GA: Board Position: 
+Time : 36
+============================
+MIMIC: 183.0
+MIMIC: Board Position: 
+Time : 58
+
+
+300 iter:
+RHC: 188.0
+RHC: Board Position: 
+Time : 1
+============================
+SA: 190.0
+SA: Board Position: 
+Time : 0
+============================
+GA: 170.0
+GA: Board Position: 
+Time : 36
+============================
+MIMIC: 185.0
+MIMIC: Board Position: 
+Time : 62
+
+
+400 iter:
+RHC: 189.0
+RHC: Board Position: 
+Time : 1
+============================
+SA: 190.0
+SA: Board Position: 
+Time : 0
+============================
+GA: 182.0
+GA: Board Position: 
+Time : 36
+============================
+MIMIC: 182.0
+MIMIC: Board Position: 
+Time : 79
+
+500 iter:
+RHC: 189.0
+RHC: Board Position: 
+Time : 2
+============================
+SA: 190.0
+SA: Board Position: 
+Time : 0
+============================
+GA: 177.0
+GA: Board Position: 
+Time : 43
+============================
+MIMIC: 183.0
+MIMIC: Board Position: 
+Time : 91

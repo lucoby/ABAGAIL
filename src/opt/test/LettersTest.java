@@ -20,7 +20,7 @@ import java.text.*;
  * @version 1.0
  */
 public class LettersTest {
-	private static double normSub = 0, normDiv = 15;
+	private static double normSub = 0, normDiv = 45;
     private static int trainingLength = 16000, testingLength = 4000;
     
     private static Instance[] training = initializeTraining();
@@ -36,11 +36,11 @@ public class LettersTest {
     private static BackPropagationNetwork networks[] = new BackPropagationNetwork[3];
     private static NeuralNetworkOptimizationProblem[] nnop = new NeuralNetworkOptimizationProblem[3];
 
-//    private static OptimizationAlgorithm[] oa = new OptimizationAlgorithm[3];
-//    private static String[] oaNames = {"RHC", "SA", "GA"};
+    private static OptimizationAlgorithm[] oa = new OptimizationAlgorithm[3];
+    private static String[] oaNames = {"RHC", "SA", "GA"};
     
-	private static OptimizationAlgorithm[] oa = new OptimizationAlgorithm[2];
-	private static String[] oaNames = {"RHC", "SA"};
+//	private static OptimizationAlgorithm[] oa = new OptimizationAlgorithm[2];
+//	private static String[] oaNames = {"RHC", "SA"};
   
     private static String results = "";
 
@@ -57,7 +57,7 @@ public class LettersTest {
 
         oa[0] = new RandomizedHillClimbing(nnop[0]);
         oa[1] = new SimulatedAnnealing(1E11, .95, nnop[1]);
-//        oa[2] = new StandardGeneticAlgorithm(200, 100, 10, nnop[2]);
+        oa[2] = new StandardGeneticAlgorithm(200, 100, 10, nnop[2]);
 
         for(int i = 0; i < oa.length; i++) {
             double start = System.nanoTime(), end, trainingTime, testingTime, train_correct = 0, train_incorrect = 0, test_correct = 0, test_incorrect = 0;
@@ -123,23 +123,40 @@ public class LettersTest {
     }
 
     private static void train(OptimizationAlgorithm oa, BackPropagationNetwork network, String oaName) {
-        System.out.println("\nError results for " + oaName + "\n---------------------------");
-
-        for(int i = 0; i < trainingIterations; i++) {
-            oa.train();
-
-            double error = 0;
-            for(int j = 0; j < training.length; j++) {
-                network.setInputValues(training[j].getData());
-                network.run();
-
-                Instance output = training[j].getLabel(), example = new Instance(network.getOutputValues());
-                example.setLabel(new Instance(network.getOutputValues()));
-                error += measure.value(output, example);
-            }
-
-            System.out.println(df.format(error));
+        if  (oaName.equals("RHC")) {
+        	trainingIterations = 12000;
         }
+        if  (oaName.equals("SA")) {
+        	trainingIterations = 12000;
+        }
+        if  (oaName.equals("GA")) {
+        	trainingIterations = 1;
+        }
+        
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("src/opt/test/LettersError " + oaName + ".txt"), "utf-8"))) {
+//        	System.out.println("\nError results for " + oaName + "\n---------------------------");
+        	writer.write("\nError results for " + oaName + "\n---------------------------\n");
+        	
+        	for(int i = 0; i < trainingIterations; i++) {
+        		oa.train();
+        		
+        		double error = 0;
+        		for(int j = 0; j < training.length; j++) {
+        			network.setInputValues(training[j].getData());
+        			network.run();
+        			
+        			Instance output = training[j].getLabel(), example = new Instance(network.getOutputValues());
+        			example.setLabel(new Instance(network.getOutputValues()));
+        			error += measure.value(output, example);
+        		}
+        		
+//        		System.out.println(df.format(error));
+        		writer.write(df.format(error) + "\n");
+        	}
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
     }
 
     private static Instance[] initializeTraining() {

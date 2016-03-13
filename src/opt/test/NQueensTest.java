@@ -35,7 +35,7 @@ import shared.FixedIterationTrainer;
  */
 public class NQueensTest {
     /** The n value */
-    private static final int N = 10;
+    private static final int N = 20;
     /** The t value */
     
     public static void main(String[] args) {
@@ -44,6 +44,9 @@ public class NQueensTest {
         for (int i = 0; i < N; i++) {
         	ranges[i] = random.nextInt();
         }
+        
+        int iters = 500;
+        
         NQueensFitnessFunction ef = new NQueensFitnessFunction();
         Distribution odd = new DiscretePermutationDistribution(N);
         NeighborFunction nf = new SwapNeighbor();
@@ -55,7 +58,7 @@ public class NQueensTest {
         ProbabilisticOptimizationProblem pop = new GenericProbabilisticOptimizationProblem(ef, odd, df);
         
         RandomizedHillClimbing rhc = new RandomizedHillClimbing(hcp);      
-        FixedIterationTrainer fit = new FixedIterationTrainer(rhc, 100);
+        FixedIterationTrainer fit = new FixedIterationTrainer(rhc, iters);
         fit.train();
         long starttime = System.currentTimeMillis();
         System.out.println("RHC: " + ef.value(rhc.getOptimal()));
@@ -66,7 +69,7 @@ public class NQueensTest {
         System.out.println("============================");
         
         SimulatedAnnealing sa = new SimulatedAnnealing(1E1, .1, hcp);
-        fit = new FixedIterationTrainer(sa, 100);
+        fit = new FixedIterationTrainer(sa, iters);
         fit.train();
         
         starttime = System.currentTimeMillis();
@@ -79,7 +82,7 @@ public class NQueensTest {
         
         starttime = System.currentTimeMillis();
         StandardGeneticAlgorithm ga = new StandardGeneticAlgorithm(200, 0, 10, gap);
-        fit = new FixedIterationTrainer(ga, 100);
+        fit = new FixedIterationTrainer(ga, iters);
         fit.train();
         System.out.println("GA: " + ef.value(ga.getOptimal()));
         System.out.println("GA: Board Position: ");
@@ -90,7 +93,7 @@ public class NQueensTest {
         
         starttime = System.currentTimeMillis();
         MIMIC mimic = new MIMIC(200, 10, pop);
-        fit = new FixedIterationTrainer(mimic, 5);
+        fit = new FixedIterationTrainer(mimic, iters/20);
         fit.train();
         System.out.println("MIMIC: " + ef.value(mimic.getOptimal()));
         System.out.println("MIMIC: Board Position: ");
