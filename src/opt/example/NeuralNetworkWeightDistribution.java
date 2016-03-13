@@ -38,7 +38,7 @@ public class NeuralNetworkWeightDistribution extends AbstractDistribution {
     public Instance sample(Instance ignored) {
         double[] weights = new double[weightCount];
         for (int i = 0; i < weights.length; i++) {
-            weights[i] = random.nextDouble() - .5;
+            weights[i] = 25 * (random.nextDouble() - .5);
         }
         return new Instance(weights);
     }
