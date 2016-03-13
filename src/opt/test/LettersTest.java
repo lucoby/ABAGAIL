@@ -32,8 +32,12 @@ public class LettersTest {
     private static BackPropagationNetwork networks[] = new BackPropagationNetwork[3];
     private static NeuralNetworkOptimizationProblem[] nnop = new NeuralNetworkOptimizationProblem[3];
 
-    private static OptimizationAlgorithm[] oa = new OptimizationAlgorithm[3];
-    private static String[] oaNames = {"RHC", "SA", "GA"};
+//    private static OptimizationAlgorithm[] oa = new OptimizationAlgorithm[3];
+//    private static String[] oaNames = {"RHC", "SA", "GA"};
+    
+	private static OptimizationAlgorithm[] oa = new OptimizationAlgorithm[2];
+	private static String[] oaNames = {"RHC", "SA"};
+  
     private static String results = "";
 
     private static DecimalFormat df = new DecimalFormat("0.000");
@@ -47,7 +51,7 @@ public class LettersTest {
 
         oa[0] = new RandomizedHillClimbing(nnop[0]);
         oa[1] = new SimulatedAnnealing(1E11, .95, nnop[1]);
-        oa[2] = new StandardGeneticAlgorithm(200, 100, 10, nnop[2]);
+//        oa[2] = new StandardGeneticAlgorithm(200, 100, 10, nnop[2]);
 
         for(int i = 0; i < oa.length; i++) {
             double start = System.nanoTime(), end, trainingTime, testingTime, correct = 0, incorrect = 0;
@@ -66,7 +70,7 @@ public class LettersTest {
                 networks[i].run();
 
                 predicted = instances[j].getLabel().getData().argMax();
-                actual = instances[j].getLabel().getData().argMax();
+                actual = networks[i].getOutputValues().argMax();
 //                predicted = Double.parseDouble(instances[j].getLabel().toString());
 //                actual = Double.parseDouble(networks[i].getOutputValues().toString());
 
@@ -122,7 +126,7 @@ public class LettersTest {
                 attributes[i][1] = new double[26]; // 26 outputs
 
                 for(int j = 0; j < 16; j++)
-                    attributes[i][0][j] = Double.parseDouble(scan.next());
+                    attributes[i][0][j] = Double.parseDouble(scan.next()) / 15;
 
                 attributes[i][1][scan.next().charAt(0) - 'A'] = 1;
                 
