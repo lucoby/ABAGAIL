@@ -7,7 +7,6 @@ import dist.DiscreteDependencyTree;
 import dist.DiscretePermutationDistribution;
 import dist.DiscreteUniformDistribution;
 import dist.Distribution;
-
 import opt.SwapNeighbor;
 import opt.GenericHillClimbingProblem;
 import opt.HillClimbingProblem;
@@ -55,22 +54,38 @@ public class TravelingSalesmanTest {
         HillClimbingProblem hcp = new GenericHillClimbingProblem(ef, odd, nf);
         GeneticAlgorithmProblem gap = new GenericGeneticAlgorithmProblem(ef, odd, mf, cf);
         
+        
+        int iter = 16000;
+        
+        long starttime = System.currentTimeMillis();
         RandomizedHillClimbing rhc = new RandomizedHillClimbing(hcp);      
-        FixedIterationTrainer fit = new FixedIterationTrainer(rhc, 200000);
+        FixedIterationTrainer fit = new FixedIterationTrainer(rhc, iter);
         fit.train();
-        System.out.println(ef.value(rhc.getOptimal()));
+        System.out.println("RHC: " + ef.value(rhc.getOptimal()));
+        System.out.println("Time : "+ (System.currentTimeMillis() - starttime));
+
+        System.out.println("============================");
         
+        starttime = System.currentTimeMillis();
         SimulatedAnnealing sa = new SimulatedAnnealing(1E12, .95, hcp);
-        fit = new FixedIterationTrainer(sa, 200000);
+        fit = new FixedIterationTrainer(sa, iter);
         fit.train();
-        System.out.println(ef.value(sa.getOptimal()));
+        System.out.println("SA: " + ef.value(sa.getOptimal()));
+        System.out.println("Time : "+ (System.currentTimeMillis() - starttime));
+
+        System.out.println("============================");
         
+        starttime = System.currentTimeMillis();
         StandardGeneticAlgorithm ga = new StandardGeneticAlgorithm(200, 150, 20, gap);
-        fit = new FixedIterationTrainer(ga, 1000);
+        fit = new FixedIterationTrainer(ga, iter / 400);
         fit.train();
-        System.out.println(ef.value(ga.getOptimal()));
+        System.out.println("GA: " + ef.value(ga.getOptimal()));
+        System.out.println("Time : "+ (System.currentTimeMillis() - starttime));
+
+        System.out.println("============================");
         
         // for mimic we use a sort encoding
+        starttime = System.currentTimeMillis();
         ef = new TravelingSalesmanSortEvaluationFunction(points);
         int[] ranges = new int[N];
         Arrays.fill(ranges, N);
@@ -78,10 +93,14 @@ public class TravelingSalesmanTest {
         Distribution df = new DiscreteDependencyTree(.1, ranges); 
         ProbabilisticOptimizationProblem pop = new GenericProbabilisticOptimizationProblem(ef, odd, df);
         
+        
         MIMIC mimic = new MIMIC(200, 100, pop);
-        fit = new FixedIterationTrainer(mimic, 1000);
+        fit = new FixedIterationTrainer(mimic, iter / 4000);
         fit.train();
-        System.out.println(ef.value(mimic.getOptimal()));
+        System.out.println("MIMIC: " + ef.value(mimic.getOptimal()));
+        System.out.println("Time : "+ (System.currentTimeMillis() - starttime));
+
+        System.out.println("============================");
         
     }
 }

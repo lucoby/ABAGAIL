@@ -6,7 +6,6 @@ import java.util.Random;
 import dist.DiscreteDependencyTree;
 import dist.DiscreteUniformDistribution;
 import dist.Distribution;
-
 import opt.DiscreteChangeOneNeighbor;
 import opt.EvaluationFunction;
 import opt.GenericHillClimbingProblem;
@@ -36,13 +35,13 @@ public class KnapsackTest {
     /** Random number generator */
     private static final Random random = new Random();
     /** The number of items */
-    private static final int NUM_ITEMS = 40;
+    private static final int NUM_ITEMS = 100;
     /** The number of copies each */
     private static final int COPIES_EACH = 4;
     /** The maximum weight for a single element */
-    private static final double MAX_WEIGHT = 50;
+    private static final double MAX_WEIGHT = 100;
     /** The maximum volume for a single element */
-    private static final double MAX_VOLUME = 50;
+    private static final double MAX_VOLUME = 100;
     /** The volume of the knapsack */
     private static final double KNAPSACK_VOLUME = 
          MAX_VOLUME * NUM_ITEMS * COPIES_EACH * .4;
@@ -71,25 +70,41 @@ public class KnapsackTest {
         GeneticAlgorithmProblem gap = new GenericGeneticAlgorithmProblem(ef, odd, mf, cf);
         ProbabilisticOptimizationProblem pop = new GenericProbabilisticOptimizationProblem(ef, odd, df);
         
+        int iter = 20000;
+        
+        long starttime = System.currentTimeMillis();
         RandomizedHillClimbing rhc = new RandomizedHillClimbing(hcp);      
-        FixedIterationTrainer fit = new FixedIterationTrainer(rhc, 200000);
+        FixedIterationTrainer fit = new FixedIterationTrainer(rhc, iter);
         fit.train();
-        System.out.println(ef.value(rhc.getOptimal()));
+        System.out.println("RHC: " + ef.value(rhc.getOptimal()));
+        System.out.println("Time : "+ (System.currentTimeMillis() - starttime));
+
+        System.out.println("============================");
         
+        starttime = System.currentTimeMillis();
         SimulatedAnnealing sa = new SimulatedAnnealing(100, .95, hcp);
-        fit = new FixedIterationTrainer(sa, 200000);
+        fit = new FixedIterationTrainer(sa, iter);
         fit.train();
-        System.out.println(ef.value(sa.getOptimal()));
+        System.out.println("SA: " + ef.value(sa.getOptimal()));
+        System.out.println("Time : "+ (System.currentTimeMillis() - starttime));
         
+        System.out.println("============================");
+        
+        starttime = System.currentTimeMillis();
         StandardGeneticAlgorithm ga = new StandardGeneticAlgorithm(200, 150, 25, gap);
-        fit = new FixedIterationTrainer(ga, 1000);
+        fit = new FixedIterationTrainer(ga, iter / 200);
         fit.train();
-        System.out.println(ef.value(ga.getOptimal()));
+        System.out.println("GA: " + ef.value(ga.getOptimal()));
+        System.out.println("Time : "+ (System.currentTimeMillis() - starttime));
         
+        System.out.println("============================");
+        
+        starttime = System.currentTimeMillis();
         MIMIC mimic = new MIMIC(200, 100, pop);
-        fit = new FixedIterationTrainer(mimic, 1000);
+        fit = new FixedIterationTrainer(mimic, iter / 4000);
         fit.train();
-        System.out.println(ef.value(mimic.getOptimal()));
+        System.out.println("MIMIC: " + ef.value(mimic.getOptimal()));
+        System.out.println("Time : "+ (System.currentTimeMillis() - starttime));
     }
 
 }

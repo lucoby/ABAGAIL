@@ -124,10 +124,10 @@ public class LettersTest {
 
     private static void train(OptimizationAlgorithm oa, BackPropagationNetwork network, String oaName) {
         if  (oaName.equals("RHC")) {
-        	trainingIterations = 12000;
+        	trainingIterations = 3000;
         }
         if  (oaName.equals("SA")) {
-        	trainingIterations = 12000;
+        	trainingIterations = 1;
         }
         if  (oaName.equals("GA")) {
         	trainingIterations = 1;

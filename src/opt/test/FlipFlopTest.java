@@ -66,7 +66,7 @@ public class FlipFlopTest {
         System.out.println(ef.value(ga.getOptimal()));
         
         MIMIC mimic = new MIMIC(200, 5, pop);
-        fit = new FixedIterationTrainer(mimic, 1000);
+        fit = new FixedIterationTrainer(mimic, 100);
         fit.train();
         System.out.println(ef.value(mimic.getOptimal()));
     }

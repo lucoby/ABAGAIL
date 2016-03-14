@@ -39,9 +39,13 @@ import shared.FixedIterationTrainer;
  */
 public class MaxKColoringTest {
     /** The n value */
-    private static final int N = 50; // number of vertices
-    private static final int L =4; // L adjacent nodes per vertex
-    private static final int K = 8; // K possible colors
+//    private static final int N = 50; // number of vertices
+//    private static final int L =4; // L adjacent nodes per vertex
+//    private static final int K = 8; // K possible colors
+	
+    private static final int N = 100; // number of vertices
+    private static final int L = 6; // L adjacent nodes per vertex
+    private static final int K = 12; // K possible colors
     /**
      * The test main
      * @param args ignored
@@ -74,9 +78,12 @@ public class MaxKColoringTest {
         Distribution df = new DiscreteDependencyTree(.1); 
         ProbabilisticOptimizationProblem pop = new GenericProbabilisticOptimizationProblem(ef, odd, df);
         
+        int iter = 40000;
+        
+        
         long starttime = System.currentTimeMillis();
         RandomizedHillClimbing rhc = new RandomizedHillClimbing(hcp);      
-        FixedIterationTrainer fit = new FixedIterationTrainer(rhc, 20000);
+        FixedIterationTrainer fit = new FixedIterationTrainer(rhc, iter);
         fit.train();
         System.out.println("RHC: " + ef.value(rhc.getOptimal()));
         System.out.println(ef.foundConflict());
@@ -86,7 +93,7 @@ public class MaxKColoringTest {
         
         starttime = System.currentTimeMillis();
         SimulatedAnnealing sa = new SimulatedAnnealing(1E12, .1, hcp);
-        fit = new FixedIterationTrainer(sa, 20000);
+        fit = new FixedIterationTrainer(sa, iter);
         fit.train();
         System.out.println("SA: " + ef.value(sa.getOptimal()));
         System.out.println(ef.foundConflict());
@@ -96,7 +103,7 @@ public class MaxKColoringTest {
         
         starttime = System.currentTimeMillis();
         StandardGeneticAlgorithm ga = new StandardGeneticAlgorithm(200, 10, 60, gap);
-        fit = new FixedIterationTrainer(ga, 50);
+        fit = new FixedIterationTrainer(ga, iter/400);
         fit.train();
         System.out.println("GA: " + ef.value(ga.getOptimal()));
         System.out.println(ef.foundConflict());
@@ -106,7 +113,7 @@ public class MaxKColoringTest {
         
         starttime = System.currentTimeMillis();
         MIMIC mimic = new MIMIC(200, 100, pop);
-        fit = new FixedIterationTrainer(mimic, 5);
+        fit = new FixedIterationTrainer(mimic, iter/4000);
         fit.train();
         System.out.println("MIMIC: " + ef.value(mimic.getOptimal()));  
         System.out.println(ef.foundConflict());

@@ -45,7 +45,7 @@ public class NQueensTest {
         	ranges[i] = random.nextInt();
         }
         
-        int iters = 500;
+        int iters = 100;
         
         NQueensFitnessFunction ef = new NQueensFitnessFunction();
         Distribution odd = new DiscretePermutationDistribution(N);
@@ -57,10 +57,11 @@ public class NQueensTest {
         GeneticAlgorithmProblem gap = new GenericGeneticAlgorithmProblem(ef, odd, mf, cf);
         ProbabilisticOptimizationProblem pop = new GenericProbabilisticOptimizationProblem(ef, odd, df);
         
+        long starttime = System.currentTimeMillis();
         RandomizedHillClimbing rhc = new RandomizedHillClimbing(hcp);      
         FixedIterationTrainer fit = new FixedIterationTrainer(rhc, iters);
         fit.train();
-        long starttime = System.currentTimeMillis();
+        
         System.out.println("RHC: " + ef.value(rhc.getOptimal()));
         System.out.println("RHC: Board Position: ");
        // System.out.println(ef.boardPositions());
@@ -68,11 +69,12 @@ public class NQueensTest {
         
         System.out.println("============================");
         
+        starttime = System.currentTimeMillis();
         SimulatedAnnealing sa = new SimulatedAnnealing(1E1, .1, hcp);
         fit = new FixedIterationTrainer(sa, iters);
         fit.train();
         
-        starttime = System.currentTimeMillis();
+        
         System.out.println("SA: " + ef.value(sa.getOptimal()));
         System.out.println("SA: Board Position: ");
        // System.out.println(ef.boardPositions());
