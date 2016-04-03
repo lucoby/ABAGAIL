@@ -141,6 +141,20 @@ public class KMeansClusterer extends AbstractConditionalDistribution implements 
         return distributionFor(data).mode();
     }
 
+    public int closest(Instance data) {
+    	int closest = 0;
+        double closestDistance = distanceMeasure
+            .value(data, clusterCenters[0]);
+        for (int j = 1; j < k; j++) {
+            double distance = distanceMeasure
+                .value(data, clusterCenters[j]);
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closest = j;
+            }
+        }
+        return closest;
+    }
     /**
      * Get the cluster centers
      * @return the cluster centers
