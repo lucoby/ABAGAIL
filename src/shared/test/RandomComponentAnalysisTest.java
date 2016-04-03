@@ -1,17 +1,15 @@
 package shared.test;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.Scanner;
 
 import shared.DataSet;
 import shared.Instance;
 import shared.filt.IndependentComponentAnalysis;
+import shared.filt.InsignificantComponentAnalysis;
+import shared.filt.RandomizedProjectionFilter;
 import util.linalg.Matrix;
 import util.linalg.RectangularMatrix;
 
@@ -20,29 +18,24 @@ import util.linalg.RectangularMatrix;
  * @author Andrew Guillory gtg008g@mail.gatech.edu
  * @version 1.0
  */
-public class IndepenentComponentAnalysisTestLetters {
+public class RandomComponentAnalysisTest {
     
     /**
      * The test main
      * @param args ignored
      */
 	private static double normSub = 0, normDiv = 45;
-    private static int trainingLength = 16000, testingLength = 4000, num_attributes = 16, num_outputs = 26;
+    private static int trainingLength = 16000, testingLength = 4000, num_attributes = 16, num_outputs = 26, n=10;
     
     public static void main(String[] args) {
     	Instance[] instances = initializeTraining();
-    	
-        DataSet set = new DataSet(instances);
-        IndependentComponentAnalysis filter = new IndependentComponentAnalysis(set, -1);
+    	RandomizedProjectionFilter filter = new RandomizedProjectionFilter(num_attributes, n);
         filter.filter(set);
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("src/shared/test/LettersICA.txt"), "utf-8"))) {
-        	writer.write(set.toString());
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println("After ICA");
+        System.out.println(set);
           
     }
-
+    
     private static Instance[] initializeTraining() {
 
         double[][][] attributes = new double[trainingLength][][];
@@ -81,4 +74,5 @@ public class IndepenentComponentAnalysisTestLetters {
 
         return instances;
     }
+
 }
