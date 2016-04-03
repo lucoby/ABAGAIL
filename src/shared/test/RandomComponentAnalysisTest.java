@@ -30,8 +30,9 @@ public class RandomComponentAnalysisTest {
     public static void main(String[] args) {
     	Instance[] instances = initializeTraining();
     	RandomizedProjectionFilter filter = new RandomizedProjectionFilter(num_attributes, n);
+        DataSet set = new DataSet(instances);
         filter.filter(set);
-        System.out.println("After ICA");
+
         System.out.println(set);
           
     }

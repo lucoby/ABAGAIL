@@ -252,7 +252,8 @@ public class Instance implements Serializable, Copyable {
     public String toString() {
         String result = data.toString();
         if (label != null) {
-            result += " : " + label.toString();
+//            result += " : " + label.toString();
+            result += ", " + (int) label.getData().get(0);
         }
         if (weight != 1.0) {
             result += " x " + weight;
