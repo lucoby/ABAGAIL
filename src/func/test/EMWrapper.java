@@ -7,7 +7,7 @@ public class EMWrapper {
 	}
 	
 	public static void testRun(String testFile, int trainingLength, int testingLength, int num_attributes, int num_outputs, boolean letters) {
-		int min = 26, max = 30;
+		int min = 2, max = 30;
 		int[] trainCorrect = new int[max - min + 1];
 		int[] testCorrect = new int[max - min + 1];
 		
@@ -16,7 +16,7 @@ public class EMWrapper {
 			int[] correct = test.test();
 			trainCorrect[k - min] = correct[0];
 			testCorrect[k - min] = correct[1];
-			System.out.println(trainCorrect[k - min] + " " + testCorrect[k - min]);
+			System.out.println(k + " " + trainCorrect[k - min] + " " + testCorrect[k - min]);
 			
 		}
 	}

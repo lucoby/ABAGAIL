@@ -48,12 +48,12 @@ public class EMTester {
         em.estimate(set);
         int[][] trainClusterMatrix = new int[k][num_outputs];
         for(Instance i : trainInstances) {
-        	Instance a = em.value(i);
-        	Instance c = em.value(i);
-//        	int a = em.closest(i);
+//        	Instance a = em.value(i);
+//        	Instance c = em.value(i);
+        	int a = (int) em.value(i).getData().get(0);
         	int b = (int) i.getLabel().getData().get(0);
-//        	trainClusterMatrix[a][b] += 1;
-        	System.out.println(a + " " + c + " " + b);
+        	trainClusterMatrix[a][b] += 1;
+//        	System.out.println(a + " " + c + " " + b);
         }
         int[] correct = new int[2];
         correct[0] = 0;
@@ -67,22 +67,22 @@ public class EMTester {
         	correct[0] += largest;
         }
         
-//        int[][] testClusterMatrix = new int[k][num_outputs];
-//        for(Instance i : testInstances) {
-//        	int a = em.closest(i);
-//        	int b = (int) i.getLabel().getData().get(0);
-//        	testClusterMatrix[a][b] += 1;
-//        }
-//        correct[1] = 0;
-//        for (int[] r : testClusterMatrix) {
-//        	int largest = 0;
-//        	for (int c : r) {
-//        		if (c > largest) {
-//        			largest = c;
-//        		}
-//        	}
-//        	correct[1] += largest;
-//        }
+        int[][] testClusterMatrix = new int[k][num_outputs];
+        for(Instance i : testInstances) {
+        	int a = (int) em.value(i).getData().get(0);
+        	int b = (int) i.getLabel().getData().get(0);
+        	testClusterMatrix[a][b] += 1;
+        }
+        correct[1] = 0;
+        for (int[] r : testClusterMatrix) {
+        	int largest = 0;
+        	for (int c : r) {
+        		if (c > largest) {
+        			largest = c;
+        		}
+        	}
+        	correct[1] += largest;
+        }
 
         return correct;
     }
