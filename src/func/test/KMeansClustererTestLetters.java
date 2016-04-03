@@ -24,7 +24,8 @@ public class KMeansClustererTestLetters {
      * @param args ignored
      */
 	private static double normSub = 0, normDiv = 45;
-    private static int trainingLength = 16000, testingLength = 4000, num_attributes = 16, num_outputs = 26, k=26;
+    private static int trainingLength = 16000, testingLength = 4000, num_attributes = 16, num_outputs = 26;
+    private static int k;
     
     public static void main(String[] args) throws Exception {
         Instance[] instances = initializeTraining();
@@ -34,12 +35,59 @@ public class KMeansClustererTestLetters {
         int[][] clusterMatrix = new int[k][num_outputs];
         for(Instance i : instances) {
 //        	clusterMatrix
-        	Instance a = km.value(i);
-        	Instance c = km.value(i);
-        	double b = i.getLabel().getData().get(0);
-        	System.out.println(km.value(i) + " " + km.closest(i) + " " + i.getLabel());
+        	int a = km.closest(i);
+        	int b = (int) i.getLabel().getData().get(0);
+        	clusterMatrix[a][b] += 1;
         }
-        System.out.println(km);
+        int correct = 0;
+        for (int[] r : clusterMatrix) {
+        	int largest = 0;
+        	for (int c : r) {
+        		System.out.print(c + " ");
+        		if (c > largest) {
+        			largest = c;
+        		}
+        	}
+        	System.out.println();
+        	correct += largest;
+        }
+        System.out.println(correct);
+        System.out.println(1.0 * correct / trainingLength);
+//        System.out.println(km);
+    }
+    
+    public KMeansClustererTestLetters(int k) {
+    	this.k = k;
+    }
+    
+    public int test() {
+    	Instance[] instances = initializeTraining();
+        DataSet set = new DataSet(instances);
+        KMeansClusterer km = new KMeansClusterer(k);
+        km.estimate(set);
+        int[][] clusterMatrix = new int[k][num_outputs];
+        for(Instance i : instances) {
+//        	clusterMatrix
+        	int a = km.closest(i);
+        	int b = (int) i.getLabel().getData().get(0);
+        	clusterMatrix[a][b] += 1;
+        }
+        int correct = 0;
+        for (int[] r : clusterMatrix) {
+        	int largest = 0;
+        	for (int c : r) {
+        		System.out.print(c + " ");
+        		if (c > largest) {
+        			largest = c;
+        		}
+        	}
+        	System.out.println();
+        	correct += largest;
+        }
+        System.out.println(correct);
+        System.out.println(1.0 * correct / trainingLength);
+//        System.out.println(km);
+        return correct;
     }
     
     private static Instance[] initializeTraining() {
