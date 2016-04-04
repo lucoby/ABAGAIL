@@ -12,6 +12,7 @@ import java.util.Scanner;
 import shared.DataSet;
 import shared.Instance;
 import shared.filt.IndependentComponentAnalysis;
+import shared.filt.RandomizedProjectionFilter;
 import util.linalg.Matrix;
 import util.linalg.RectangularMatrix;
 
@@ -20,7 +21,7 @@ import util.linalg.RectangularMatrix;
  * @author Andrew Guillory gtg008g@mail.gatech.edu
  * @version 1.0
  */
-public class ICATester {
+public class RCATester {
     
     /**
      * The test main
@@ -36,10 +37,9 @@ public class ICATester {
         testInstances = initializeTraining(false);
     	
         DataSet set = new DataSet(trainInstances);
-        IndependentComponentAnalysis filter = new IndependentComponentAnalysis(set, k);
+        RandomizedProjectionFilter filter = new RandomizedProjectionFilter(k, num_attributes);
         filter.filter(set);
-        System.out.println(filter.getProjection());
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + "ICA" + testCase + "train.txt"), "utf-8"))) {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + "RCA" + testCase + "train.txt"), "utf-8"))) {
         	writer.write(set.toString());
         } catch(Exception e) {
             e.printStackTrace();
@@ -47,7 +47,7 @@ public class ICATester {
         DataSet testset = new DataSet(testInstances);
         
         filter.filter(testset);
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + "ICA" + testCase + "test.txt"), "utf-8"))) {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + "RCA" + testCase + "test.txt"), "utf-8"))) {
         	writer.write(testset.toString());
         } catch(Exception e) {
             e.printStackTrace();
@@ -55,7 +55,7 @@ public class ICATester {
           
     }
     
-    public ICATester(int k, String file, int trainingLength, int testingLength, int num_attributes, int num_outputs, boolean letters) {
+    public RCATester(int k, String file, int trainingLength, int testingLength, int num_attributes, int num_outputs, boolean letters) {
     	this.k = k;
     	this.fileName = file;
     	this.trainFile = file + "Train.txt";

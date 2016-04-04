@@ -11,16 +11,17 @@ import java.util.Scanner;
 
 import shared.DataSet;
 import shared.Instance;
-import shared.filt.IndependentComponentAnalysis;
+import shared.filt.PrincipalComponentAnalysis;
+import shared.filt.RandomizedProjectionFilter;
 import util.linalg.Matrix;
-import util.linalg.RectangularMatrix;
+import util.test.EigenvalueDecompositionTest;
 
 /**
  * A class for testing
  * @author Andrew Guillory gtg008g@mail.gatech.edu
  * @version 1.0
  */
-public class ICATester {
+public class PCATester {
     
     /**
      * The test main
@@ -30,16 +31,20 @@ public class ICATester {
 	private String testFile, trainFile, fileName;
 	private Instance[] trainInstances, testInstances;
 	private boolean letters;
-    
-    public void test(String testCase) {
+	
+	public void test(String testCase) {
     	trainInstances = initializeTraining(true);
         testInstances = initializeTraining(false);
     	
         DataSet set = new DataSet(trainInstances);
-        IndependentComponentAnalysis filter = new IndependentComponentAnalysis(set, k);
+        PrincipalComponentAnalysis filter = new PrincipalComponentAnalysis(set, k);
         filter.filter(set);
+        System.out.println("eigen:");
+        System.out.println(filter.getEigenValues());
+        System.out.println("projection:");
         System.out.println(filter.getProjection());
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + "ICA" + testCase + "train.txt"), "utf-8"))) {
+        
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + "PCA" + testCase + "train.txt"), "utf-8"))) {
         	writer.write(set.toString());
         } catch(Exception e) {
             e.printStackTrace();
@@ -47,15 +52,14 @@ public class ICATester {
         DataSet testset = new DataSet(testInstances);
         
         filter.filter(testset);
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + "ICA" + testCase + "test.txt"), "utf-8"))) {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName + "PCA" + testCase + "test.txt"), "utf-8"))) {
         	writer.write(testset.toString());
         } catch(Exception e) {
             e.printStackTrace();
         }
-          
     }
-    
-    public ICATester(int k, String file, int trainingLength, int testingLength, int num_attributes, int num_outputs, boolean letters) {
+
+    public PCATester(int k, String file, int trainingLength, int testingLength, int num_attributes, int num_outputs, boolean letters) {
     	this.k = k;
     	this.fileName = file;
     	this.trainFile = file + "Train.txt";
@@ -119,4 +123,5 @@ public class ICATester {
         
         return instances;
     }
+
 }

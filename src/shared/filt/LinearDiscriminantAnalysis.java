@@ -34,7 +34,9 @@ public class LinearDiscriminantAnalysis implements ReversibleFilter {
      * @param toKeep the number of components to keep
      * @param dataSet the set form which to estimate components
      */
-    public LinearDiscriminantAnalysis(DataSet dataSet) {
+
+    
+    public LinearDiscriminantAnalysis(DataSet dataSet, int toKeep) {
         // calculate the mean
         MultivariateGaussian mg = new MultivariateGaussian();
         mg.estimate(dataSet);
@@ -47,7 +49,10 @@ public class LinearDiscriminantAnalysis implements ReversibleFilter {
         // calculate the class counts and weight sums
         int classCount = dataSet.getDescription()
              .getLabelDescription().getDiscreteRange();
-        int toKeep = classCount - 1;
+        if (toKeep == -1) {
+        	toKeep = classCount - 1;
+        }
+        
         int[] classCounts = new int[classCount];
         double[] weightSums = new double[classCount];
         double weightSum = 0;
@@ -106,7 +111,11 @@ public class LinearDiscriminantAnalysis implements ReversibleFilter {
         }
     }
 
-    /**
+    public LinearDiscriminantAnalysis(DataSet set) {
+    	this(set, -1);
+    }
+
+	/**
      * @see shared.filt.DataSetFilter#filter(shared.DataSet)
      */
     public void filter(DataSet dataSet) {

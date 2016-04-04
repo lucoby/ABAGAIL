@@ -120,7 +120,7 @@ public class EMTester {
                 if(this.letters) {
                 	attributes[i][1][0] = scan.next().charAt(0) - 'A';
                 } else {
-                	attributes[i][1][0] = Integer.parseInt(scan.next()) - 1;
+                	attributes[i][1][0] = Integer.parseInt(scan.next());
                 }
                 scan.close();
             }

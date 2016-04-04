@@ -29,7 +29,7 @@ public class RandomComponentAnalysisTest {
     
     public static void main(String[] args) {
     	Instance[] instances = initializeTraining();
-    	RandomizedProjectionFilter filter = new RandomizedProjectionFilter(num_attributes, n);
+    	RandomizedProjectionFilter filter = new RandomizedProjectionFilter(n, num_attributes);
         DataSet set = new DataSet(instances);
         filter.filter(set);
 

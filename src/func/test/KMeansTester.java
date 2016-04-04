@@ -81,6 +81,7 @@ public class KMeansTester {
         	int a = km.closest(i);
         	int b = (int) i.getLabel().getData().get(0);
         	trainClusterMatrix[a][b] += 1;
+//        	System.out.println(km.mode(i) + " " + km.mode(i) + " " + km.mode(i));
         }
         int[] correct = new int[2];
         correct[0] = 0;
@@ -153,7 +154,7 @@ public class KMeansTester {
                 if(this.letters) {
                 	attributes[i][1][0] = scan.next().charAt(0) - 'A';
                 } else {
-                	attributes[i][1][0] = Integer.parseInt(scan.next()) - 1;
+                	attributes[i][1][0] = Integer.parseInt(scan.next());
                 }
                 scan.close();
             }
